@@ -1,0 +1,12 @@
+class Auto:
+    def __init__(self, rekisteritunnus, huippunopeus):
+        self.rekisteritunnus = rekisteritunnus
+        self.huippunopeus = huippunopeus
+        self.tamanhetkinen_nopeus = 0
+        self.kuljettu_matka = 0
+
+
+uusi_auto = Auto("ABC-123", 142)
+
+print(f"Auton rekisteritunnus on {uusi_auto.rekisteritunnus}, huippunopeus on {uusi_auto.huippunopeus} kilometriä tunnissa.")
+print (f"Tämänhetkinen nopeus on {uusi_auto.tamanhetkinen_nopeus} km/h ja matkaa ollaan kuljettu {uusi_auto.kuljettu_matka} kilometriä.")
