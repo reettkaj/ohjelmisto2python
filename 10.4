@@ -1,0 +1,79 @@
+import random
+
+class Auto:
+    def __init__(self, rekisteritunnus, huippunopeus):
+        self.rekisteritunnus = rekisteritunnus
+        self.huippunopeus = huippunopeus
+        self.tamanhetkinen_nopeus = 0
+        self.kuljettu_matka = 0
+
+    def kiihdytä(self, km_h):
+        uusi_nopeus = self.tamanhetkinen_nopeus + km_h
+        if uusi_nopeus > self.huippunopeus:
+            self.tamanhetkinen_nopeus = self.huippunopeus
+        elif uusi_nopeus < 0:
+            self.tamanhetkinen_nopeus = 0
+        else:
+            self.tamanhetkinen_nopeus = uusi_nopeus
+
+    def kulje(self, tuntimäärä):
+        matkustettu_matka = tuntimäärä * self.tamanhetkinen_nopeus
+        self.kuljettu_matka += matkustettu_matka
+
+
+class Kilpailu:
+    def __init__(self, nimi, pituus_km, autot):
+        self.nimi = nimi
+        self.pituus_km = pituus_km
+        self.autot = autot
+
+    def tunti_kuluu(self):
+        # Jokaiselle autolle arvotaan nopeuden muutos ja se kulkee tunnin
+        for auto in self.autot:
+            nopeuden_muutos = random.randint(-10, 15)  # Arvotaan nopeuden muutos
+            auto.kiihdytä(nopeuden_muutos)
+            auto.kulje(1)  # Auto kulkee tunnin ajan nykyisellä nopeudella
+
+    def tulosta_tilanne(self):
+        # Tulostetaan kaikkien autojen tilanne taulukossa
+        print(f"{'Rekisteritunnus':<15}{'Huippunopeus':<15}{'Nopeus':<15}{'Kuljettu matka':<15}")
+        print("-" * 60)
+        for auto in self.autot:
+            print(f"{auto.rekisteritunnus:<15}{auto.huippunopeus:<15}{auto.tamanhetkinen_nopeus:<15}{auto.kuljettu_matka:<15.2f}")
+
+    def kilpailu_ohi(self):
+        # Tarkistetaan, onko joku autoista päässyt maaliin
+        for auto in self.autot:
+            if auto.kuljettu_matka >= self.pituus_km:
+                return True
+        return False
+
+
+# Pääohjelma
+if __name__ == "__main__":
+    # Luodaan 10 auton lista
+    autot = []
+    for i in range(1, 11):
+        rekisteritunnus = f"ABC-{i}"
+        huippunopeus = random.randint(100, 200)
+        autot.append(Auto(rekisteritunnus, huippunopeus))
+
+    # Luodaan kilpailu, jossa on 8000 kilometrin matka
+    kilpailu = Kilpailu("Suuri romuralli", 8000, autot)
+
+    tunti = 0
+
+    # Simuloidaan kilpailua
+    while not kilpailu.kilpailu_ohi():
+        kilpailu.tunti_kuluu()  # Kilpailu etenee yhden tunnin
+
+        tunti += 1
+
+        # Tulostetaan tilanne 10 tunnin välein
+        if tunti % 10 == 0:
+            print(f"\nTilanne {tunti} tunnin jälkeen:")
+            kilpailu.tulosta_tilanne()
+
+    # Tulostetaan lopputilanne, kun kilpailu on ohi
+    print("\nKilpailu on päättynyt! Lopputilanne:")
+    kilpailu.tulosta_tilanne()
