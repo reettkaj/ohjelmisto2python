@@ -1,0 +1,32 @@
+import requests
+
+def hae_saa(paikkakunta, api_avain):
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={paikkakunta}&appid={api_avain}"
+    url = "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}"
+
+
+    try:
+        vastaus = requests.get(url)
+        vastaus.raise_for_status()
+
+        data = vastaus.json()
+
+        lampotila_kelvin = data["main"]["temp"]
+        saakuvaus = data["weather"][0]["description"]
+
+        lampotila_celsius = lampotila_kelvin - 273.15
+
+        print(f"Sää {paikkakunta}-paikkakunnalla:")
+        print(f"{saakuvaus.capitalize()}, {lampotila_celsius:.2f} °C")
+
+    except requests.RequestException as e:
+        print(f"Virhe haettaessa säätietoja: {e}")
+    except KeyError:
+        print("Säätietoja ei löytynyt annetulle paikkakunnalle.")
+
+if __name__ == "__main__":
+    paikkakunta = input("Anna paikkakunnan nimi: ")
+    api_avain = "8e2207d177f283cc2605d9413a1fd996"
+    hae_saa(paikkakunta, api_avain)
+
+    #en osaa
