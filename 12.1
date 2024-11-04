@@ -1,0 +1,22 @@
+import requests
+
+def hae_chuck_norris_vitsi():
+    url = "https://api.chucknorris.io/jokes/random"
+
+    try:
+        vastaus = requests.get(url)
+        vastaus.raise_for_status()
+
+        data = vastaus.json()
+        vitsi = data.get("value")
+
+        if vitsi:
+            print("Chuck Norris -vitsi:")
+            print(vitsi)
+        else:
+            print("Vitsin hakemisessa tapahtui virhe.")
+
+    except requests.RequestException as e:
+        print(f"Virhe haettaessa vitsiä: {e}")
+
+hae_chuck_norris_vitsi()
